@@ -1,0 +1,45 @@
+<bot id="auroraRH" blocoInicial="onboarding.saudacao">
+	
+	<bloco id="onboarding.saudacao"	pergunta="Bem-vindo ao Aurora RH. Como podemos te chamar?"	proximoBloco="onboarding.dadosEntrada">
+		<entrada id="nome" tipo="texto"></entrada>
+	</bloco>
+	
+	<bloco id="onboarding.dadosEntrada"	pergunta="Tudo bem, {nome}? Por favor, me informe o seu CPF."	proximoBloco="onboarding.confirma_dados_cpf">
+		<entrada id="cpf" tipo="texto"></entrada>
+		<saidas>
+			<saida id="nome" tipo="texto" cifrado="false"></saida>
+		</saidas>
+	</bloco>
+	
+	<bloco id="onboarding.confirma_dados_cpf"
+		pergunta="{nome}, voce confirma o seu cpf {cpf}?"
+		proximoBloco="empregadoAcao">
+		<entrada id="dados_confirmados" tipo="texto"></entrada>
+		<saidas>
+			<saida id="nome" tipo="texto" cifrado="false"></saida>
+			<saida id="cpf" tipo="texto" cifrado="false"></saida>
+		</saidas>
+	</bloco>
+	
+	<blocoMenu id="menuPrincipal" pergunta="{nome}, o que você deseja fazer?">
+		<items>
+			<item id="1" titulo="Ferias/Licença" blocoId="menuFerias"/>
+			<item id="2" titulo="Holerite" blocoId="menuHolerite"/>
+			<item id="9" titulo="Encerrar Conversa" blocoId="encerramento"/>
+		</items>
+		<saidas>
+			<saida id="nome" tipo="texto" cifrado="false"></saida>
+		</saidas>
+	</blocoMenu>
+	
+	<blocoAcao id="empregadoAcao" classe="ai.blip.aurora.rh.acao.EmpregadoAcao">
+		<blocos>
+			<blocoRef id="onboarding.dadosEntrada"/>
+			<blocoRef id="onboarding.confirma_dados_cpf"/>
+			<blocoRef id="menuPrincipal"/>
+		</blocos>
+	</blocoAcao>
+	
+	<bloco id="encerramento" pergunta="Obrigado por utilizar o Aurora RH. Nos veremos em breve!"/>
+
+</bot>

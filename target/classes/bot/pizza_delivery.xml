@@ -1,0 +1,94 @@
+<bot id="pizzariaAurora" blocoInicial="onboarding.saudacao">
+
+	<bloco id="onboarding.saudacao"	pergunta="Bem-vindo à Pizzaria Aurora! 🍕 Como podemos te chamar?"	proximoBloco="onboarding.saudacao.dados">
+		<entrada id="nome" tipo="texto"></entrada>
+	</bloco>
+
+	<bloco id="onboarding.saudacao.dados" pergunta="{nome}, por favor, informe o seu telefone."	proximoBloco="acao.cliente">
+		<entrada id="telefone" tipo="texto"></entrada>
+		<saidas>
+			<saida id="nome" tipo="texto" cifrado="false"/>
+		</saidas>
+	</bloco>
+	
+	<blocoAcao id="acao.cliente" classe="ai.blip.aurora.delivery.acao.ClienteAcao">
+		<blocos>
+			<blocoRef id="menu.principal" />
+		</blocos>
+	</blocoAcao>
+
+	<blocoMenu id="menu.principal" pergunta="Olá {nome}, o que você deseja hoje?">
+		<items>
+			<item id="1" titulo="Ver Cardápio" blocoId="menu.categorias" />
+			<item id="9" titulo="Sair" blocoId="encerramento" />
+		</items>
+		<saidas>
+			<saida id="nome" tipo="texto" cifrado="false"></saida>
+		</saidas>
+	</blocoMenu>
+
+	<blocoMenu id="menu.categorias"	pergunta="Escolha uma categoria:">
+		<items>
+			<item id="1" titulo="Pizzas Salgadas" blocoId="acao.produtos" />
+			<item id="2" titulo="Pizzas Doces" blocoId="acao.produtos" />
+			<item id="3" titulo="Bebidas" blocoId="acao.produtos" />
+			<item id="0" titulo="Voltar" blocoId="menu.principal" />
+		</items>
+	</blocoMenu>
+	
+	<blocoAcao id="acao.produtos" classe="ai.blip.aurora.delivery.acao.ProdutoAcao">
+		<blocos>
+			<blocoRef id="menu.produtos" />
+		</blocos>
+	</blocoAcao>
+	
+	<blocoMenu id="menu.produtos" pergunta="Escolha um produto:">
+		<saidas>
+			<saida id="menu.produtos_itensMenu" tipo="texto" cifrado="false"></saida>
+		</saidas>
+	</blocoMenu>
+
+	<blocoAcao id="acao.adicionar.carrinho" classe="ai.blip.aurora.delivery.acao.CarrinhoAcao">
+		<blocos>
+			<blocoRef id="menu.checkout" />
+		</blocos>
+	</blocoAcao>
+
+	<blocoMenu id="menu.checkout" pergunta="Item adicionado! Deseja finalizar ou continuar?">
+		<items>
+			<item id="1" titulo="Finalizar Pedido" blocoId="menu.pagamento" />
+			<item id="2" titulo="Continuar Comprando" blocoId="menu.categorias" />
+		</items>
+	</blocoMenu>
+
+	<blocoMenu id="menu.pagamento" pergunta="Como deseja pagar?">
+		<items>
+			<item id="1" titulo="PIX (5% Desconto)" blocoId="acao.gerar.pix" />
+			<item id="2" titulo="Cartão (na entrega)"
+				blocoId="acao.finalizar.pedido" />
+		</items>
+	</blocoMenu>
+
+	<blocoAcao id="acao.gerar.pix" classe="ai.blip.aurora.delivery.acao.PagamentoAcao">
+		<blocos>
+			<blocoRef id="pedido.confirmado" />
+			<blocoRef id="menu.pagamento" />
+		</blocos>
+	</blocoAcao>
+
+	<bloco id="pedido.confirmado"
+		pergunta="Pedido confirmado, {nome}! Segue o resumo de sua compra {resumo}O código PIX para pagamento é: {pix_code}. O total foi R$ {valor_total}, sendo entregue no endereco {endereco}."
+		proximoBloco="encerramento">
+
+		<saidas>
+			<saida id="nome" tipo="texto" />
+			<saida id="resumo" tipo="texto" />
+			<saida id="pix_code" tipo="texto" />
+			<saida id="valor_total" tipo="numero" />
+			<saida id="endereco" tipo="texto" />
+		</saidas>
+	</bloco>
+
+	<bloco id="encerramento" pergunta="Já estamos preparando sua pizza. Nos vemos na entrega! 🍕" proximoBloco="menu.principal" />
+
+</bot>
