@@ -89,6 +89,6 @@
 		</saidas>
 	</bloco>
 
-	<bloco id="encerramento" pergunta="Já estamos preparando sua pizza. Nos vemos na entrega! 🍕" />
+	<bloco id="encerramento" pergunta="Já estamos preparando sua pizza. Nos vemos na entrega! 🍕" proximoBloco="menu.principal" />
 
 </bot>

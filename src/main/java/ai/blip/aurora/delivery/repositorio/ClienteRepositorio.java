@@ -11,6 +11,7 @@ public class ClienteRepositorio {
 	
 	public ClienteRepositorio() {
 		this.dados.put("81992240951", new Cliente("81992240951", "Anderson Fonseca", "Av Tucunare, 1192"));
+		this.dados.put("11991637239", new Cliente("11991637239", "Sophia Fonseca", "Av Tucunare, 1192"));
 	} 
 
 	public Cliente obter(String id) {

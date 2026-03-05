@@ -1,6 +1,7 @@
 package ai.blip.aurora.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,9 @@ public class Bot {
 		
 		Bloco bloco = null;
 		
-		for (Bloco blocoIn : blocosNavegados.reversed()) {
+		Collections.reverse(blocosNavegados);
+		
+		for (Bloco blocoIn : blocosNavegados) {
 			if (blocoIn.getClass().getTypeName().equals(clazz.getTypeName())) {
 				bloco = blocoIn;
 				break;
@@ -75,26 +78,61 @@ public class Bot {
 		return bloco;
 	}
 	
+	private int blocoInicial = 0;
+	
+	private Bloco bloco;
+		
 	public String processar(String mensagem) throws CloneNotSupportedException {
 
 		String resposta = "";
 		
-		Bloco bloco = getBlocoInicial();
-		
-		if (bloco.getPergunta().trim().length() > 0) {
-			resposta = bloco.getPergunta();	
-		}
-		
-		if (bloco instanceof BlocoAcao) {
-			((BlocoAcao) bloco).execute();
-		} else if (bloco.getVariavelEntrada() != null) {
-			bloco.setResposta(mensagem);
-		}  
-	
-		this.blocosNavegados.add((Bloco) bloco.clone());
-		bloco = bloco.getProximoBloco();
+		if (blocoInicial < 2) {
+			this.bloco = getBlocoInicial();
 			
+			if (blocoInicial == 0 && this.bloco.getPergunta().trim().length() > 0) {
+			
+				resposta = this.bloco.getPergunta();	
+			
+			} else if (blocoInicial == 1) {
+				this.bloco.setResposta(mensagem);
+				
+				this.blocosNavegados.add((Bloco) this.bloco.clone());
+				this.bloco = this.bloco.getProximoBloco();
+				
+				resposta = this.bloco.getPergunta();
+			}
+			
+			blocoInicial++;
+					
+		} else {
+			
+			 if (this.bloco.getVariavelEntrada() != null) {
+				this.bloco.setResposta(mensagem);
+				
+				this.blocosNavegados.add((Bloco) this.bloco.clone());
+				this.bloco = this.bloco.getProximoBloco();
+				
+				trataBlocoAcao(this.bloco);
+				
+				resposta = this.bloco.getPergunta();
+			}
+		}
+				
 		return resposta;
+	}
+
+	private void trataBlocoAcao(Bloco bloco) throws CloneNotSupportedException {
+		
+		if (this.bloco instanceof BlocoAcao) {
+			((BlocoAcao) this.bloco).execute();
+			
+			this.blocosNavegados.add((Bloco) this.bloco.clone());
+			this.bloco = this.bloco.getProximoBloco();
+			
+			if (this.bloco instanceof BlocoAcao) {
+				trataBlocoAcao(this.bloco);
+			}
+		}
 	}
 
 	public void run() throws CloneNotSupportedException {

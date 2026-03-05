@@ -62,8 +62,10 @@ public class AuroraTelegramBot extends TelegramLongPollingBot {
     }
 
     @Override
-    public String getBotUsername() { return "AuroraRH_Bot"; }
+    public String getBotUsername() { return "PizzaAurora_bot"; }
 
     @Override
-    public String getBotToken() { return "8390091402:AAHNVA8BnZp4Za2v8LbI5V0h6d7ChVjDcWI"; }
+    public String getBotToken() { 
+    	return "8390091402:AAHNVa8BnZp4Za2v8LbI5VOh6d7ChVjDcWI"; 
+    }
 }
