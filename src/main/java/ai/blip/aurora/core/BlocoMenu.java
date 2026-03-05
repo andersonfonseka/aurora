@@ -1,11 +1,15 @@
 package ai.blip.aurora.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BlocoMenu extends Bloco {
 	
 	private Map<String, ItemMenu> blocosMenu = new HashMap<>();
+	
+	private List<ItemMenu> items = new ArrayList<>();
 	
 	private BlocoAcao menuAcao;
 
@@ -21,11 +25,13 @@ public class BlocoMenu extends Bloco {
 
 	public BlocoMenu adicionarItemMenu(ItemMenu itemMenu) {
 		this.blocosMenu.put(itemMenu.getId(), itemMenu);
+		items.add(itemMenu);
 		return this;
 	}
 	
 	public void clear() {
-		blocosMenu.values().clear();
+		this.blocosMenu.values().clear();
+		this.items.clear();
 	}
 
 	public void build() {
@@ -39,7 +45,7 @@ public class BlocoMenu extends Bloco {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for (ItemMenu itm: this.blocosMenu.values()) {
+		for (ItemMenu itm: this.items) {
 			sb.append("\n" + itm.getId() + ". " + itm.getTitulo());  
 		}
 		

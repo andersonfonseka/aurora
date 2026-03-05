@@ -101,14 +101,7 @@ public class Bloco implements Cloneable {
 	}
 		
 	public Bloco getProximoBloco() {
-		
-		Bloco bloco = this.bot.obterBloco(proximoBlocoId);
-		
-		if (bloco == null) {
-			bloco = this.getBot().getBlocoInicial();
-		}
-		
-		return bloco;
+		return this.bot.obterBloco(proximoBlocoId);
 	}
 	
 	public void setProximoBloco(String proximoBloco) {

@@ -7,7 +7,6 @@ import ai.blip.aurora.core.BlocoMenu;
 import ai.blip.aurora.core.Bot;
 import ai.blip.aurora.core.ItemMenu;
 import ai.blip.aurora.delivery.entidade.Produto;
-import ai.blip.aurora.delivery.repositorio.CarrinhoRepositorio;
 import ai.blip.aurora.delivery.repositorio.ProdutoRepositorio;
 
 public class ProdutoAcao extends BlocoExecutor {
@@ -38,7 +37,7 @@ public class ProdutoAcao extends BlocoExecutor {
 				blocoMenuProdutos.adicionarItemMenu(new ItemMenu(produto.id(), produto.descricao() + " R$ - " + produto.valor(), "acao.adicionar.carrinho"));
 			}
 
-			blocoMenuProdutos.adicionarItemMenu(new ItemMenu("0", "Voltar", "menu.categorias"));
+			blocoMenuProdutos.adicionarItemMenu(new ItemMenu("99", "Voltar", "menu.categorias"));
 			
 			blocoMenuProdutos.build();
 			

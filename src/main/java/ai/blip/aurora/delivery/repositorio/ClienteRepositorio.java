@@ -18,4 +18,8 @@ public class ClienteRepositorio {
 		return this.dados.get(id);
 	}
 	
+	public void cadastrar(Cliente cliente) {
+		this.dados.put(cliente.id(), new Cliente(cliente.id(), cliente.nome(), cliente.endereco()));
+	}
+	
 }

@@ -9,12 +9,13 @@ import ai.blip.aurora.delivery.repositorio.ClienteRepositorio;
 
 public class ClienteAcao extends BlocoExecutor {
 	
-	private String menuPrincipal;
+	private String menuPrincipal, clienteCadastro;
 	
 	public ClienteAcao(Bot bot, List<String> blocosId) {
 		super(bot, blocosId);
 		
 		this.menuPrincipal = blocosId.get(0);
+		this.clienteCadastro = blocosId.get(1);
 	}
 
 	public void run() {
@@ -23,10 +24,17 @@ public class ClienteAcao extends BlocoExecutor {
 			
 			Cliente cliente = clienteRepositorio.obter(String.valueOf(getBot().obterValor("telefone")));
 			
-			getBot().adicionar("nome", cliente.nome());
-			getBot().adicionar("endereco", cliente.endereco());
+			if (cliente != null) {
+
+				getBot().adicionar("nome", cliente.nome());
+				getBot().adicionar("endereco", cliente.endereco());
+				
+				getBlocoAcionador().setProximoBloco(this.menuPrincipal);
+
+			} else {
+				getBlocoAcionador().setProximoBloco(this.clienteCadastro);
+			}
 			
-			getBlocoAcionador().setProximoBloco(this.menuPrincipal);
 	}
 
 }
