@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
+import ai.blip.aurora.telegram.ContextoManager;
+import ai.blip.aurora.telegram.ContextoUsuario;
+
 public class Bot {
 	
 	private String id = UUID.randomUUID().toString();
@@ -79,6 +82,10 @@ public class Bot {
 		return this.blocos.get(chave);
 	}
 	
+	public int getCountBlocoInicial() {
+		return countBlocoInicial;
+	}
+
 	public void setCountBlocoInicial(int countBlocoInicial) {
 		this.countBlocoInicial = countBlocoInicial;
 	}
@@ -100,7 +107,7 @@ public class Bot {
 	}
 	
 		
-	public String processar(String mensagem) throws CloneNotSupportedException {
+	public String processar(ContextoUsuario ctu, String mensagem) throws CloneNotSupportedException {
 
 		String resposta = "";
 		
@@ -136,6 +143,7 @@ public class Bot {
 			}
 		}
 				
+		ctu.atualizarInteracao();
 		return resposta;
 	}
 

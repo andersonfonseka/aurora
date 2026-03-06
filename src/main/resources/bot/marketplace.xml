@@ -107,8 +107,10 @@
 		</saidas>
 	</bloco>
 
+	<!-- 
 	<blocoEncerramento id="encerramento" pergunta="Já estamos preparando sua entrega. Nos vemos em breve!" 
 					   classe="ai.blip.aurora.delivery.bloco.BlocoFim"
 					   proximoBloco="menu.principal"/>
+    -->
 
 </bot>

@@ -16,13 +16,19 @@ public class AuroraTelegramBot extends TelegramLongPollingBot {
 
     private Map<Long, Bot> sessoes = new HashMap<>();
     private AuroraXmlParser parser = new AuroraXmlParser();
+    private ContextoManager contextoManager = new ContextoManager();
 
     @Override
     public void onUpdateReceived(Update update) {
+    	
         if (update.hasMessage() && update.getMessage().hasText()) {
-            long chatId = update.getMessage().getChatId();
-            String textoUsuario = update.getMessage().getText();
+        
+        	long chatId = update.getMessage().getChatId();
 
+        	ContextoUsuario ctu = contextoManager.getContexto(chatId);
+        	
+            String textoUsuario = update.getMessage().getText();
+            
             Bot botDoUsuario = sessoes.computeIfAbsent(chatId, id -> {
                 
             	try {
@@ -33,9 +39,13 @@ public class AuroraTelegramBot extends TelegramLongPollingBot {
             });
 
             String resposta;
+            
+            if (botDoUsuario.getCountBlocoInicial() == 0) {
+            	textoUsuario = update.getChatMember().getFrom().getUserName();
+            }
 
             try {
-				resposta = botDoUsuario.processar(textoUsuario);
+				resposta = botDoUsuario.processar(ctu, textoUsuario);
 			    enviarMensagem(chatId, resposta);
 				
 			} catch (CloneNotSupportedException e) {
@@ -62,6 +72,6 @@ public class AuroraTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() { 
-    	return MensagemUtil.obterInstancia().obter("key"); 
+    	return MensagemUtil.obterInstancia().obter("token"); 
     }
 }
