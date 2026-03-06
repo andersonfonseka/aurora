@@ -9,7 +9,7 @@ import ai.blip.aurora.core.Bot;
 
 public class AuroraXmlParser {
 
-    public Bot carregar(InputStream xmlInput) throws Exception {
+    public Bot carregar(InputStream xmlInput, long chatId) throws Exception {
      
     	SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxParser = factory.newSAXParser();
@@ -17,6 +17,9 @@ public class AuroraXmlParser {
         AuroraXmlHandler handler = new AuroraXmlHandler();
         saxParser.parse(xmlInput, handler);
         
-        return handler.getBot();
+        Bot bot = handler.getBot();
+        	bot.setChatId(chatId);
+        
+        return bot;
     }
 }

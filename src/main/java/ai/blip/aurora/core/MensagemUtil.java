@@ -22,7 +22,7 @@ public class MensagemUtil {
 	
 	private MensagemUtil() {
 		
-		InputStream is = MensagemUtil.class.getResourceAsStream("/messages.properties");
+		InputStream is = MensagemUtil.class.getResourceAsStream("/aurora.properties");
 
 		try {
 			properties.load(is);

@@ -20,9 +20,9 @@ public class PagamentoAcao extends BlocoExecutor {
 		
 			CarrinhoRepositorio carrinhoRepositorio = CarrinhoRepositorio.obterInstancia();
 			
-			getBot().adicionar("resumo", carrinhoRepositorio.obterDetalhamentoCompra(getBot().getId()));
+			getBot().adicionar("resumo", carrinhoRepositorio.obterDetalhamentoCompra(getBot().getChatId()));
 			getBot().adicionar("pix_code", UUID.randomUUID().toString());
-			getBot().adicionar("valor_total", carrinhoRepositorio.getProdutosValorTotal(getBot().getId()));
+			getBot().adicionar("valor_total", carrinhoRepositorio.getProdutosValorTotal(getBot().getChatId()));
 		
 			getBlocoAcionador().setProximoBloco(this.pedidoConfirmado);
 	}

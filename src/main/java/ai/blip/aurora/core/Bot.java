@@ -12,6 +12,8 @@ public class Bot {
 	
 	private String id = UUID.randomUUID().toString();
 	
+	private long chatId;
+	
 	private MensagemUtil prop = MensagemUtil.obterInstancia();
 	
 	private Map<String, Object> variaveis = new HashMap<>();
@@ -22,12 +24,27 @@ public class Bot {
 	
 	private String blocoInicialId;
 	
+	// Necessário para o controle do inicio da conversa
+	private int countBlocoInicial = 0;
+	
+	//Controle de Blocos para o Telegrama
+	private Bloco bloco;
+
+	
 	public String getId() {
 		return id;
 	}
 	
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public long getChatId() {
+		return chatId;
+	}
+
+	public void setChatId(long chatId) {
+		this.chatId = chatId;
 	}
 
 	public Bloco getBlocoInicial() {
@@ -62,6 +79,10 @@ public class Bot {
 		return this.blocos.get(chave);
 	}
 	
+	public void setCountBlocoInicial(int countBlocoInicial) {
+		this.countBlocoInicial = countBlocoInicial;
+	}
+
 	public Bloco getBlocosNavegadosPorTipo(Class clazz) {
 		
 		Bloco bloco = null;
@@ -78,22 +99,19 @@ public class Bot {
 		return bloco;
 	}
 	
-	private int blocoInicial = 0;
-	
-	private Bloco bloco;
 		
 	public String processar(String mensagem) throws CloneNotSupportedException {
 
 		String resposta = "";
 		
-		if (blocoInicial < 2) {
+		if (countBlocoInicial < 2) {
 			this.bloco = getBlocoInicial();
 			
-			if (blocoInicial == 0 && this.bloco.getPergunta().trim().length() > 0) {
+			if (countBlocoInicial == 0 && this.bloco.getPergunta().trim().length() > 0) {
 			
 				resposta = this.bloco.getPergunta();	
 			
-			} else if (blocoInicial == 1) {
+			} else if (countBlocoInicial == 1) {
 				this.bloco.setResposta(mensagem);
 				
 				this.blocosNavegados.add((Bloco) this.bloco.clone());
@@ -102,7 +120,7 @@ public class Bot {
 				resposta = this.bloco.getPergunta();
 			}
 			
-			blocoInicial++;
+			countBlocoInicial++;
 					
 		} else {
 			
@@ -149,6 +167,9 @@ public class Bot {
 			
 			if (bloco instanceof BlocoAcao) {
 				((BlocoAcao) bloco).execute();
+			} else if(bloco instanceof BlocoEncerramento) {
+				BlocoEncerramento blocoEncerramento = (BlocoEncerramento) bloco; 
+				blocoEncerramento.build();
 			} else if (bloco.getVariavelEntrada() != null) {
 				String valor = scanner.nextLine();
 				bloco.setResposta(valor);

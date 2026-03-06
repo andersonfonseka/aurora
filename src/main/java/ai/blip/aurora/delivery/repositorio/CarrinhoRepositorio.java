@@ -9,7 +9,7 @@ import ai.blip.aurora.delivery.entidade.Produto;
 
 public class CarrinhoRepositorio {
 	
-	private Map<String, List<Produto>> produtos = new HashMap<>();
+	private Map<Long, List<Produto>> produtos = new HashMap<>();
 	
 	private static CarrinhoRepositorio INSTANCE;
 	
@@ -22,7 +22,7 @@ public class CarrinhoRepositorio {
 		return INSTANCE;
 	}
 	
-	public void adicionar(String id, Produto produto){
+	public void adicionar(long id, Produto produto){
 
 		if (this.produtos.containsKey(id)) {
 			List<Produto> prds = this.produtos.get(id);
@@ -34,7 +34,7 @@ public class CarrinhoRepositorio {
 		}
 	}
 	
-	public String obterDetalhamentoCompra(String id) {
+	public String obterDetalhamentoCompra(Long id) {
 
 		StringBuilder sb = new StringBuilder();
 
@@ -51,7 +51,7 @@ public class CarrinhoRepositorio {
 		return sb.toString();
 	}
 	
-	public double getProdutosValorTotal(String id) {
+	public double getProdutosValorTotal(Long id) {
 		
 		List<Produto> prds =  this.produtos.get(id);
 		

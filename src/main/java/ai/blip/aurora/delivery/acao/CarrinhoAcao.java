@@ -30,7 +30,7 @@ public class CarrinhoAcao extends BlocoExecutor {
 			
 			Produto produto = produtoRepositorio.obter(resposta);
 			
-			carrinhoRepositorio.adicionar(getBot().getId(), produto);
+			carrinhoRepositorio.adicionar(getBot().getChatId(), produto);
 			
 			getBlocoAcionador().setProximoBloco(this.menuCheckout);
 	}

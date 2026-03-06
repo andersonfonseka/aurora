@@ -8,6 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import ai.blip.aurora.core.Bloco;
 import ai.blip.aurora.core.BlocoAcao;
+import ai.blip.aurora.core.BlocoEncerramento;
 import ai.blip.aurora.core.BlocoExecutor;
 import ai.blip.aurora.core.BlocoMenu;
 import ai.blip.aurora.core.Bot;
@@ -29,6 +30,8 @@ public class AuroraXmlHandler extends DefaultHandler {
 	private BlocoMenu blocoMenu;
 	
 	private BlocoAcao blocoAcao;
+	
+	private BlocoEncerramento blocoEncerramento;
 
 	public Bot getBot() {
 		return bot;
@@ -93,6 +96,22 @@ public class AuroraXmlHandler extends DefaultHandler {
 		
 		if (qName.equalsIgnoreCase("blocoRef") && isBlocoAcaoOpen) {
 			this.blocoAcao.adicionarBlocoId(attributes.getValue("id"));
+		}
+		
+		if (qName.equalsIgnoreCase("blocoEncerramento")) {
+			
+			String classe = attributes.getValue("classe");
+			
+			try {
+
+				this.blocoEncerramento = (BlocoEncerramento) Class.forName(classe).getDeclaredConstructor(Bot.class).newInstance(this.bot);
+				blocoEncerramento.setId(attributes.getValue("id"));
+				blocoEncerramento.setPergunta(attributes.getValue("pergunta"));
+				blocoEncerramento.setProximoBloco(attributes.getValue("proximoBloco"));
+
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}

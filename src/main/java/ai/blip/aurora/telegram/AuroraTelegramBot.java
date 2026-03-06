@@ -9,11 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import ai.blip.aurora.core.Bot;
+import ai.blip.aurora.core.MensagemUtil;
 import ai.blip.aurora.xml.AuroraXmlParser;
 
 public class AuroraTelegramBot extends TelegramLongPollingBot {
 
-    // Mapa de sessões: ChatId -> Instância do Bot do Usuário
     private Map<Long, Bot> sessoes = new HashMap<>();
     private AuroraXmlParser parser = new AuroraXmlParser();
 
@@ -23,37 +23,33 @@ public class AuroraTelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
             String textoUsuario = update.getMessage().getText();
 
-            // 1. Recupera ou cria o bot para este usuário específico
             Bot botDoUsuario = sessoes.computeIfAbsent(chatId, id -> {
-                try {
-                    // Carrega o XML da Pizzaria ou RH
-                    return parser.carregar(getClass().getResourceAsStream("/bot/pizza_delivery.xml"));
+                
+            	try {
+                    return parser.carregar(getClass().getResourceAsStream("/bot/marketplace.xml"), chatId);
                 } catch (Exception e) {
                     return null;
                 }
             });
 
-            // 2. Processa a mensagem na sua Engine
             String resposta;
-			try {
+
+            try {
 				resposta = botDoUsuario.processar(textoUsuario);
-				
-				// 3. Envia a resposta de volta para o Telegram
-	            enviarMensagem(chatId, resposta);
+			    enviarMensagem(chatId, resposta);
 				
 			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-            
         }
     }
 
     private void enviarMensagem(long chatId, String texto) {
-        SendMessage message = new SendMessage();
+
+    	SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
         message.setText(texto);
+        
         try {
             execute(message);
         } catch (TelegramApiException e) {
@@ -66,6 +62,6 @@ public class AuroraTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() { 
-    	return "8390091402:AAHNVa8BnZp4Za2v8LbI5VOh6d7ChVjDcWI"; 
+    	return MensagemUtil.obterInstancia().obter("key"); 
     }
 }
