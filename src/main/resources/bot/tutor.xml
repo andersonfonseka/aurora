@@ -1,0 +1,66 @@
+<bot id="tutor_educacional" blocoInicial="onboarding.aluno">
+
+	<bloco id="onboarding.aluno"
+		pergunta="Olá! Sou seu tutor. O que vamos aprender hoje?"
+		proximoBloco="acao.inicializar.trilha">
+		<entrada id="assunto_estudo" tipo="texto"></entrada>
+	</bloco>
+
+	<blocoAcao id="acao.inicializar.trilha"
+		classe="ai.blip.aurora.pedagogia.InicializarTrilhaAcao">
+		<blocos>
+			<blocoRef id="acao.gerar.aula" />
+		</blocos>
+	</blocoAcao>
+
+	<blocoAcao id="acao.gerar.aula"
+		classe="ai.blip.aurora.pedagogia.GeradorAulaAcao">
+		<blocos>
+			<blocoRef id="aula.exibicao" />
+		</blocos>
+	</blocoAcao>
+
+	<bloco id="aula.exibicao"
+		pergunta="{conteudo_aula} \n\n Pronto para os exercícios?"
+		proximoBloco="acao.gerar.exercicio">
+		<saidas>
+			<saida id="conteudo_aula" tipo="texto" />
+		</saidas>
+	</bloco>
+
+	<blocoAcao id="acao.gerar.exercicio"
+		classe="ai.blip.aurora.pedagogia.GeradorExercicioAcao">
+		<blocos>
+			<blocoRef id="exercicio.pergunta" />
+		</blocos>
+	</blocoAcao>
+
+	<bloco id="exercicio.pergunta" pergunta="{pergunta_exercicio}"
+		proximoBloco="acao.avaliar.resposta">
+		<entrada id="resposta_aluno" tipo="texto"></entrada>
+		<saidas>
+			<saida id="pergunta_exercicio" tipo="texto" />
+		</saidas>
+	</bloco>
+
+	<blocoAcao id="acao.avaliar.resposta"
+		classe="ai.blip.aurora.pedagogia.AvaliacaoAcao">
+		<blocos>
+			<blocoRef id="feedback.positivo" />
+			<blocoRef id="feedback.reforco" />
+		</blocos>
+	</blocoAcao>
+
+	<bloco id="feedback.positivo"
+		pergunta="Muito bem! Você dominou esse nível. Vamos para o próximo?"
+		proximoBloco="onboarding.aluno" />
+
+	<bloco id="feedback.reforco"
+		pergunta="Quase lá! Vamos revisar este ponto: {explicacao_erro}"
+		proximoBloco="acao.gerar.aula">
+		<saidas>
+			<saida id="explicacao_erro" tipo="texto" />
+		</saidas>
+	</bloco>
+
+</bot>
